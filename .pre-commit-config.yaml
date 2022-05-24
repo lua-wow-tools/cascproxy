@@ -24,7 +24,7 @@ repos:
     types: [lua]
   - id: build
     name: build
-    entry: luarocks build --local --no-install
+    entry: luarocks build --no-install
     language: system
     pass_filenames: false
 - repo: meta

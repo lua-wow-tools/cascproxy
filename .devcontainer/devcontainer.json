@@ -1,6 +1,7 @@
 {
 	"name": "lua-wow-tools/cascproxy",
 	"build": {
+	  "context": "..",
 	  "dockerfile": "Dockerfile"
 	},
 	"postCreateCommand": "pre-commit install && pre-commit run -a",

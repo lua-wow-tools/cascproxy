@@ -9,3 +9,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && hererocks -l 5.1 -r 3.8.0 /usr/local \
     && echo busted luacheck | xargs -n1 luarocks install
 COPY --from=stylua-builder /opt/stylua /usr/local
+
+COPY cascproxy-scm-0.rockspec /tmp
+RUN luarocks build --only-deps /tmp/cascproxy-scm-0.rockspec
