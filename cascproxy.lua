@@ -48,7 +48,7 @@ local pathparser = (function()
 end)()
 
 local mkres = require('http.headers').new
-assert(require('http.server').listen({
+local listener = assert(require('http.server').listen({
   host = 'localhost',
   onerror = function(_, ctx, op, err)
     local msg = op .. ' on ' .. tostring(ctx) .. ' failed'
@@ -78,4 +78,7 @@ assert(require('http.server').listen({
     assert(stream:write_chunk(data, true))
   end,
   port = args.port,
-})):loop()
+}))
+pcall(function()
+  listener:loop()
+end)
