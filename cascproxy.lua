@@ -8,6 +8,7 @@ local args = (function()
     'wow_classic_era_ptr',
     'wow_classic_ptr',
   })
+  parser:option('--port', 'port to listen on', 8080)
   parser:flag('-v --verbose', 'verbose printing')
   return parser:parse()
 end)()
@@ -40,4 +41,25 @@ local casc = (function()
   return handle
 end)()
 
-assert(casc)
+assert(casc) -- TODO actually use
+
+local mkres = require('http.headers').new
+assert(require('http.server').listen({
+  host = 'localhost',
+  onerror = function(_, ctx, op, err)
+    local msg = op .. ' on ' .. tostring(ctx) .. ' failed'
+    if err then
+      msg = msg .. ': ' .. tostring(err)
+    end
+    assert(io.stderr:write(msg, '\n'))
+  end,
+  onstream = function(_, stream)
+    assert(stream:get_headers())
+    local res = mkres()
+    res:append(':status', '200')
+    res:append('content-type', 'text/plain')
+    assert(stream:write_headers(res, false))
+    assert(stream:write_chunk('Hello, world!', true))
+  end,
+  port = args.port,
+})):loop()
