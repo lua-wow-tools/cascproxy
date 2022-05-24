@@ -14,6 +14,7 @@ source = {
 }
 dependencies = {
   'lua = 5.1',
+  'argparse',
   'luacasc',
 }
 build = {
