@@ -44,7 +44,9 @@ end)()
 local pathparser = (function()
   local lpeg = require('lpeg')
   local C, P, R = lpeg.C, lpeg.P, lpeg.R
-  return (P('/fdid/') * C(R('09') ^ 1) * P(-1)) / tonumber
+  local fdid = P('/fdid/') * C(R('09') ^ 1) / tonumber
+  local name = P('/name/') * C(R('az', '09', '__', '--', '//') ^ 1)
+  return fdid + name
 end)()
 
 local mkres = require('http.headers').new
@@ -59,14 +61,14 @@ local listener = assert(require('http.server').listen({
   end,
   onstream = function(_, stream)
     local req = assert(stream:get_headers())
-    local fdid = pathparser:match(req:get(':path'))
+    local fid = pathparser:match(req:get(':path'))
     local res = mkres()
-    if not fdid then
+    if not fid then
       res:append(':status', '400')
       assert(stream:write_headers(res, true))
       return
     end
-    local data = casc:readFile(fdid)
+    local data = casc:readFile(fid)
     if not data then
       res:append(':status', '404')
       assert(stream:write_headers(res, true))
