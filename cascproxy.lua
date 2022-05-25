@@ -7,6 +7,10 @@ end)()
 
 local log = print
 
+-- Tune GC very tightly. CASCs are memory hogs.
+collectgarbage('setpause', 100)
+collectgarbage('setstepmul', 500)
+
 require('lfs').mkdir(args.cache)
 
 local cascs = (function()
@@ -46,9 +50,6 @@ local cascs = (function()
   end
   return cascs
 end)()
-
-collectgarbage()
-collectgarbage()
 
 local pathparser = (function()
   local lpeg = require('lpeg')
