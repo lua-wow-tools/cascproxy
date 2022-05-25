@@ -87,6 +87,7 @@ local listener = assert(require('http.server').listen({
     res:append(':status', '200')
     assert(stream:write_headers(res, false))
     assert(stream:write_chunk(data, true))
+    log('served', product, fid)
   end,
   port = args.port,
 }))
