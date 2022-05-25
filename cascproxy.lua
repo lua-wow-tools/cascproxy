@@ -1,12 +1,11 @@
 local args = (function()
   local parser = require('argparse')()
   parser:option('-c --cache', 'cache directory', 'cache')
-  parser:option('-p --port', 'web server port', 8080)
-  parser:flag('-v --verbose', 'verbose printing')
+  parser:option('-p --port', 'web server port', '8080'):convert(tonumber)
   return parser:parse()
 end)()
 
-local log = args.verbose and print or function() end
+local log = print
 
 require('lfs').mkdir(args.cache)
 
