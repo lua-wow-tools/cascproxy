@@ -52,7 +52,7 @@ local pathparser = (function()
   local C, P, R = lpeg.C, lpeg.P, lpeg.R
   local fdid = P('/fdid/') * C(R('09') ^ 1) / tonumber
   local name = P('/name/') * C(R('az', 'AZ', '09', '__', '--', '//', '..') ^ 1)
-  return (fdid + name) * P(-1)
+  return P('/product/') * C(R('az', '__') ^ 1) * (fdid + name) * P(-1)
 end)()
 
 local mkres = require('http.headers').new
@@ -67,9 +67,9 @@ local listener = assert(require('http.server').listen({
   end,
   onstream = function(_, stream)
     local req = assert(stream:get_headers())
-    local fid = pathparser:match(req:get(':path'))
+    local tag, fid = pathparser:match(req:get(':path'))
     local res = mkres()
-    if not fid then
+    if not tag or not fid or tag ~= product then
       res:append(':status', '400')
       assert(stream:write_headers(res, true))
       return
