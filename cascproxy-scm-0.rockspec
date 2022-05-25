@@ -18,6 +18,7 @@ dependencies = {
   'http',
   'lpeg',
   'luacasc',
+  'luafilesystem',
 }
 build = {
   type = 'none',

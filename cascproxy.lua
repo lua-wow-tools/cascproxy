@@ -1,5 +1,6 @@
 local args = (function()
   local parser = require('argparse')()
+  parser:option('-c --cache', 'cache directory', 'cache')
   parser:option('-p --product', 'WoW product'):count(1):choices({
     'wow',
     'wowt',
@@ -14,6 +15,8 @@ local args = (function()
 end)()
 
 local log = args.verbose and print or function() end
+
+require('lfs').mkdir(args.cache)
 
 local casc = (function()
   local casc = require('casc')
