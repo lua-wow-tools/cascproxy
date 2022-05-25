@@ -75,7 +75,6 @@ local listener = assert(require('http.server').listen({
       return
     end
     res:append(':status', '200')
-    res:append('content-type', 'text/plain')
     assert(stream:write_headers(res, false))
     assert(stream:write_chunk(data, true))
   end,
