@@ -7,10 +7,10 @@ description = {
   homepage = 'https://github.com/lua-wow-tools/cascproxy',
   issues_url = 'https://github.com/lua-wow-tools/cascproxy/issues',
   maintainer = 'ferronn@ferronn.dev',
-  labels = {'wow'},
+  labels = { 'wow' },
 }
 source = {
-   url = "git+https://github.com/lua-wow-tools/cascproxy.git",
+  url = 'git+https://github.com/lua-wow-tools/cascproxy.git',
 }
 dependencies = {
   'lua = 5.1',

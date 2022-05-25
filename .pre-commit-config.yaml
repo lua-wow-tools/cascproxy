@@ -17,6 +17,11 @@ repos:
     entry: luarocks lint
     language: system
     files: '\.rockspec$'
+  - id: rockspec-stylua
+    name: format rockspecs
+    entry: stylua
+    language: system
+    files: '\.rockspec$'
   - id: luacheck
     name: luacheck
     entry: luacheck
