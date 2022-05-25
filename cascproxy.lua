@@ -45,8 +45,8 @@ local pathparser = (function()
   local lpeg = require('lpeg')
   local C, P, R = lpeg.C, lpeg.P, lpeg.R
   local fdid = P('/fdid/') * C(R('09') ^ 1) / tonumber
-  local name = P('/name/') * C(R('az', '09', '__', '--', '//') ^ 1)
-  return fdid + name
+  local name = P('/name/') * C(R('az', 'AZ', '09', '__', '--', '//', '..') ^ 1)
+  return (fdid + name) * P(-1)
 end)()
 
 local mkres = require('http.headers').new
