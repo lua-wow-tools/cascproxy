@@ -4,6 +4,9 @@
 	  "context": "..",
 	  "dockerfile": "Dockerfile"
 	},
+	"features": {
+	  "github-cli": "latest"
+	},
 	"postCreateCommand": "pre-commit install && pre-commit run -a",
 	"remoteUser": "vscode"
 }
