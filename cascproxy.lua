@@ -2,6 +2,15 @@ local args = (function()
   local parser = require('argparse')()
   parser:option('-c --cache', 'cache directory', 'cache')
   parser:option('-p --port', 'web server port', '8080'):convert(tonumber)
+  parser:option('-t --product', 'product(s) to serve'):count('*'):choices({
+    'wow',
+    'wowt',
+    'wow_classic',
+    'wow_classic_beta',
+    'wow_classic_era',
+    'wow_classic_era_ptr',
+    'wow_classic_ptr',
+  })
   return parser:parse()
 end)()
 
@@ -14,17 +23,9 @@ collectgarbage('setstepmul', 500)
 require('lfs').mkdir(args.cache)
 
 local cascs = (function()
-  local products = {
-    'wow',
-    'wowt',
-    'wow_classic',
-    'wow_classic_era',
-    'wow_classic_era_ptr',
-    'wow_classic_ptr',
-  }
   local casc = require('casc')
   local cascs = {}
-  for _, product in ipairs(products) do
+  for _, product in ipairs(args.product) do
     local url = 'http://us.patch.battle.net:1119/' .. product
     local bkey, cdn, ckey, version = casc.cdnbuild(url, 'us')
     if not bkey then
