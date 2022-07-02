@@ -72,24 +72,27 @@ local listener = assert(require('http.server').listen({
   end,
   onstream = function(_, stream)
     local req = assert(stream:get_headers())
-    local product, fid = pathparser:match(req:get(':path'))
+    local path = req:get(':path')
+    local product, fid = pathparser:match(path)
     local casc = cascs[product]
     local res = mkres()
     if not casc or not fid then
       res:append(':status', '400')
       assert(stream:write_headers(res, true))
+      log('400', path)
       return
     end
     local data = casc:readFile(fid)
     if not data then
       res:append(':status', '404')
       assert(stream:write_headers(res, true))
+      log('404', path)
       return
     end
     res:append(':status', '200')
     assert(stream:write_headers(res, false))
     assert(stream:write_chunk(data, true))
-    log('served', product, fid)
+    log('200', path)
   end,
   port = args.port,
 }))
