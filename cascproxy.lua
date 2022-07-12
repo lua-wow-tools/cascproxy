@@ -96,10 +96,25 @@ local listener = assert(require('http.server').listen({
   end,
   onstream = function(_, stream)
     local req = assert(stream:get_headers())
+    local res = mkres()
     local path = req:get(':path')
+    if path == '/' then
+      local data = { 'cascproxy', '' }
+      for k in pairs(bcascs) do
+        table.insert(data, k)
+      end
+      for k in pairs(pcascs) do
+        table.insert(data, k)
+      end
+      table.insert(data, '')
+      res:append(':status', '200')
+      assert(stream:write_headers(res, false))
+      assert(stream:write_chunk(table.concat(data, '\n'), true))
+      log('200', '/')
+      return
+    end
     local ty, name, fid = pathparser:match(path)
     local casc = (ty == 'build' and bcascs or pcascs)[name]
-    local res = mkres()
     if not casc or not fid then
       res:append(':status', '400')
       assert(stream:write_headers(res, true))
